@@ -4,10 +4,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import { Helmet } from "react-helmet-async";
+import useAxiosPublic from "../hooks/useAxiosPublic";
+import SocialLogin from "../../components/SocialLogin.jsx/SocialLogin";
 
 
 const SignUp = () => {
-
+     const axiosPublic = useAxiosPublic();
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
     const { createUser, updateUserProfile } = useContext(AuthContext);
     const navigate = useNavigate();
@@ -20,8 +22,19 @@ const SignUp = () => {
                 console.log(loggedUser);
                 updateUserProfile(data.name, data.photoURL)
                     .then(() => {
-                        console.log('user profile info updated')
-                        reset();
+                        // create user entry in the database
+                        const userInfo = {
+                            name:data.name,
+                            email:data.email
+                        }
+
+                        axiosPublic.post('/users', userInfo)
+                          .then(res =>{
+                            if(res.data.insertedId){
+                                console.log('user profile info updated')
+                                reset();
+                        
+                       
                         Swal.fire({
                             position: 'top-end',
                             icon: 'success',
@@ -30,6 +43,9 @@ const SignUp = () => {
                             timer: 1500
                         });
                         navigate('/');
+
+                    }
+                })
 
                     })
                     .catch(error => console.log(error))
@@ -93,6 +109,7 @@ const SignUp = () => {
                             </div>
                         </form>
                         <p><small>Already have an account <Link to="/login">Login</Link></small></p>
+                        <SocialLogin></SocialLogin>
                     </div>
                 </div>
             </div>
