@@ -39,14 +39,14 @@ async function run() {
     app.post('/jwt', async (req, res) => {
       const user = req.body;
       
-      const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
+      const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '8h' });
       res.send({ token });
     })
 
 
         // middlewares 
         const verifyToken = (req, res, next) => {
-          console.log('inside verify token', req.headers.authorization);
+          // console.log('inside verify token', req.headers.authorization);
           if (!req.headers.authorization) {
             return res.status(401).send({ message: 'unauthorized access' });
           }
@@ -94,6 +94,52 @@ async function run() {
         const result = await menuCollection.find().toArray();
         res.send(result);
     })
+
+    // get menu items for update
+    app.get('/menu/:id', async(req,res)=>{
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)};
+
+      const result = await menuCollection.findOne(query);
+      res.send(result);
+
+    })
+
+    app.post('/menu',async(req,res)=>{
+      const menuItem = req.body;
+      const result = await menuCollection.insertOne(menuItem);
+      res.send(result);
+    })
+    
+
+    app.patch('/menu/:id', async(req,res)=>{
+      const id = req.params.id;
+      const item = req.body;
+      const query  = {_id : new ObjectId(id)};
+      const updatedDoc = {
+        $set:{
+          name:item.name,
+          category:item.category,
+          price:item.price,
+          recipe:item.recipe,
+          image:item.image
+
+        }
+      }
+
+      const result = await menuCollection.updateOne(query,updatedDoc);
+      res.send(result);
+    })
+    
+    
+    // delete from mangeItem menu
+
+    app.delete('/menu/:id',async(req,res) =>{
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id)}
+      const result = await menuCollection.deleteOne(query);
+      res.send(result);
+    })
     
     app.get('/reviews', async(req, res) =>{
         const result = await reviewCollection.find().toArray();
@@ -118,7 +164,7 @@ async function run() {
       const result = await cartCollection.deleteOne(query);
       res.send(result);
     })
-    app.get('/users',verifyToken,verifyAdmin,async(req,res)=>{
+    app.get('/users',verifyToken,verifyAdmin, async(req,res)=>{
      
       const result = await userCollection.find().toArray();
       res.send(result);
