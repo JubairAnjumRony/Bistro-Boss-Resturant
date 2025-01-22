@@ -1,9 +1,10 @@
 import { FaGoogle } from "react-icons/fa";
-import useAuth from "../../pages/hooks/useAuth";
+
 import useAxiosPublic from "../../pages/hooks/useAxiosPublic";
 
 // import useAxiosPublic from "../../hooks/useAxiosPublic";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../../pages/hooks/useAuth";
 
 
 const SocialLogin = () => {
