@@ -16,6 +16,7 @@ import AddItems from "../pages/Dashboard/AddItem/AddItem";
 import ManageItems from "../pages/Dashboard/ManageItems/ManageItems";
 import AdminRoute from "./AdminRoute";
 import UpdateItem from "../pages/Dashboard/UpdateItem/UpdateItem";
+import Payment from "../pages/Dashboard/Payment/payment";
 
 
   export const router = createBrowserRouter([
@@ -47,7 +48,8 @@ import UpdateItem from "../pages/Dashboard/UpdateItem/UpdateItem";
         {
           path: 'secret',
           element: <PrivateRoute><Secret></Secret></PrivateRoute>
-        }
+        },
+       
       ]
     },
     {
@@ -57,7 +59,18 @@ import UpdateItem from "../pages/Dashboard/UpdateItem/UpdateItem";
         {
           path:'cart',
           element:<Cart></Cart>,
+          
+           
         },
+
+
+        {
+          path:'payment',
+          element: <Payment></Payment>
+        },
+      
+        
+        
         // admin routes
         {
           path:'users',
