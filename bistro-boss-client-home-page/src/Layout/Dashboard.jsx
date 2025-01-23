@@ -80,6 +80,11 @@ const Dashboard = () => {
                             <FaList></FaList>
                             My Bookings</NavLink>
                     </li>
+                    <li>
+                        <NavLink to="/dashboard/paymenthistory">
+                            <FaList></FaList>
+                            My Payments</NavLink>
+                    </li>
                     </>
                   }
 
